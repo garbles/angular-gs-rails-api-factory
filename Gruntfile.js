@@ -17,6 +17,14 @@ module.exports = function(grunt) {
       build: {
         src: ['<%= files.src %>'],
         dest: '<%= pkg.main %>'
+      },
+      bundle: {
+        src: [
+          'bower_components/angular-gs-apibase/build/angular-gs-apibase.js',
+          'bower_components/angular-gs-to-snake-case/build/angular-gs-to-snake-case.js',
+          '<%= files.src %>'
+        ],
+        dest: '<%= pkg.bundle %>'
       }
     },
     watch: {
@@ -29,6 +37,10 @@ module.exports = function(grunt) {
       build: {
         src: '<%= pkg.main %>',
         dest: '<%= pkg.minified %>'
+      },
+      bundle: {
+        src: '<%= pkg.bundle %>',
+        dest: '<%= pkg.minBundle %>'
       }
     },
     clean: ['<%= dir.build %>','<%= dir.temp %>'],
@@ -55,7 +67,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('build', ['clean', 'concat', 'uglify']);
+  grunt.registerTask('build', ['clean', 'concat:build', 'uglify:build', 'concat:bundle', 'uglify:bundle']);
   grunt.registerTask('test', ['build', 'jshint', 'karma:single']);
   grunt.registerTask('test:continuous', ['build', 'jshint', 'karma:continuous']);
 };

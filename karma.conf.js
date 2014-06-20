@@ -4,7 +4,10 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: [
       'bower_components/angular/angular.js',
+      'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-gs-apibase/build/angular-gs-apibase.js',
+      'bower_components/angular-gs-to-snake-case/build/angular-gs-to-snake-case.js',
       'build/**/*.js',
       'build/*.js',
       'test/**/*_spec.js',

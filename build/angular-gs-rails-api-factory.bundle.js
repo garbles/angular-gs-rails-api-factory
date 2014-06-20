@@ -1,4 +1,56 @@
 if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports){
+  module.exports = 'gs.apibase';
+}
+
+(function(window, angular, undefined) {'use strict';
+
+angular.module('gs.apibase', [])
+.provider('ApiBase', [function () {
+  var _url = '',
+    _prefix = '';
+
+  this.setUrl = function (url) {
+    _url = url;
+  };
+
+  this.setPrefix = function (prefix) {
+    _prefix = prefix;
+  };
+
+  this.$get = [function () {
+    if (_url.slice(_url.length - 1) === '/') {
+      _url = _url.slice(0, _url.length - 1);
+    }
+
+    if (_prefix[0] === '/') {
+      _prefix = _prefix.slice(1);
+    }
+
+    return _url + '/' + _prefix;
+  }];
+}]);
+
+
+})(window, window.angular);
+
+// http://jamesroberts.name/blog/2010/02/22/string-functions-for-javascript-trim-to-camel-case-to-dashed-and-to-underscore/comment-page-1/
+
+(function(window, angular, undefined) {'use strict';
+
+angular.module('gs.to-snake-case', [])
+.service('toSnakeCase', function () {
+  return function (str) {
+    if (!angular.isDefined(str)) {
+      return str;
+    }
+    var newStr = str[0].toLowerCase() + str.slice(1);
+    return newStr.replace(/([A-Z])/g, function($1){return '_'+$1.toLowerCase();});
+  };
+});
+
+})(window, window.angular);
+
+if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.exports === exports){
   module.exports = 'gs.rails-api-factory';
 }
 

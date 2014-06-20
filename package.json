@@ -4,7 +4,9 @@
   "private": true,
   "description": "Easy setup for accessing Rails API endpoints",
   "main": "./build/angular-gs-rails-api-factory.js",
+  "bundle": "./build/angular-gs-rails-api-factory.bundle.js",
   "minified": "./build/angular-gs-rails-api-factory.min.js",
+  "minBundle": "./build/angular-gs-rails-api-factory.bundle.min.js",
   "directories": {
     "test": "test"
   },

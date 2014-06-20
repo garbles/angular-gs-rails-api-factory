@@ -1,22 +1,78 @@
-describe('angular-gs-rails-api-factory', function () {
-  beforeEach(module('gs.rails-api-factory'));
+describe('RailsApiFactory', function () {
+  var base = 'base',
+    modelName = 'Model',
+    Model,
+    ModelCollection,
+    api,
+    $httpBackend;
 
-  var $scope;
+  beforeEach(function () {
+    angular.module('stubModule', [])
+      .value('ApiBase', base)
+      .factory(modelName, function () {
+        return {
+          mixin: function (obj) {
+            return obj;
+          }
+        };
+      })
+      .factory(modelName + 'Collection', function () {
+        return {
+          mixin: function (obj) {
+            return obj;
+          }
+        };
+      });
 
-  beforeEach(inject(function ($rootScope) {
-    $scope = $rootScope.$new();
+    module(
+      'gs.rails-api-factory',
+      'stubModule'
+    );
+  });
+
+  beforeEach(inject(function (_$httpBackend_, _Model_, _ModelCollection_, _RailsApiFactory_) {
+    $httpBackend = _$httpBackend_;
+    Model = _Model_;
+    ModelCollection = _ModelCollection_;
+    api = _RailsApiFactory_(modelName);
   }));
 
-  // happy path(s)
-  it('', function () {
+  function requestExpectation (url, apiMethod, httpMethod, data, response) {
+    url = base + url;
+    $httpBackend.when(httpMethod, url).respond(response);
+    $httpBackend['expect' + httpMethod](url);
+    api[apiMethod](data);
+    $httpBackend.flush();
+  }
+
+  it('gets collections and decorates them', function () {
+    spyOn(ModelCollection, 'mixin');
+    requestExpectation('/models', 'get', 'GET', {}, {models: [{}]});
+    expect(ModelCollection.mixin).toHaveBeenCalled();
   });
 
-  // null input path
-  it('', function () {
+  it('gets single records and decorates them', function () {
+    spyOn(Model, 'mixin');
+    requestExpectation('/models/1', 'get', 'GET', {id: 1}, {});
+    expect(Model.mixin).toHaveBeenCalled();
   });
 
-  // wrong type path
-  it('', function () {
+  it('posts new records', function () {
+    requestExpectation('/models', 'save', 'POST', {}, {});
   });
 
+  it('updates existing records', function () {
+    requestExpectation('/models/1', 'save', 'PATCH', {id: 1}, {});
+  });
+
+  it('deletes existing records', function () {
+    requestExpectation('/models/1', 'destroy', 'DELETE', {id: 1}, {});
+  });
+
+  it('appropriately handles alternative endpoints', inject(function (_RailsApiFactory_) {
+    var plural = 'modelzzzz';
+
+    api = _RailsApiFactory_(modelName, {plural: plural});
+    requestExpectation('/' + plural, 'get', 'GET', {}, {});
+  }));
 });

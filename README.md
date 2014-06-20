@@ -4,7 +4,7 @@
 
 Easy setup for accessing Rails API endpoints.
 
-__RESTANGULAR is better than this and you should probably use RESTANGULAR in most of your use cases.__
+__RESTANGULAR is better than this and you should probably use RESTANGULAR in most of your use cases. I wrote this for the lelz.__
 
 ### Installing
 

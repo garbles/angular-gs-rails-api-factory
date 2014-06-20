@@ -1,0 +1,27 @@
+{
+  "name": "angular-gs-rails-api-factory",
+  "version": "0.1.0",
+  "authors": [
+    "Gabriel Scholz <info@garbl.es>"
+  ],
+  "description": "Easy setup for accessing Rails API endpoints",
+  "main": "./build/angular-gs-rails-api-factory.js",
+  "keywords": ["rails","api","angular"],
+  "license": "MIT",
+  "homepage": "https://github.com/garbles/angular-gs-rails-api-factory",
+  "ignore": [
+    "src",
+    "node_modules",
+    "bower_components",
+    "test",
+    "karma.conf.js",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "angular": ">= 1.0.0"
+  },
+  "devDependencies": {
+    "angular-mocks": ">= 1.0.0"
+  }
+}

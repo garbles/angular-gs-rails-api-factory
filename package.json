@@ -1,6 +1,6 @@
 {
   "name": "angular-gs-rails-api-factory",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Easy setup for accessing Rails API endpoints",
   "main": "./build/angular-gs-rails-api-factory.js",

@@ -42,12 +42,21 @@ function ($resource, $injector, ApiBase, toSnakeCase) {
     };
 
     _params = function (args) {
-      var params = {};
-      if (angular.isArray(args)) {
-        params[_snakeModels] = args;
+      var params = {},
+        serializedArgs;
+
+      if(angular.isFunction(args.serialize)) {
+        serializedArgs = args.serialize();
       } else {
-        params[_snakeModel] = args;
+        serializedArgs = args;
       }
+
+      if (angular.isArray(serializedArgs)) {
+        params[_snakeModels] = serializedArgs;
+      } else {
+        params[_snakeModel] = serializedArgs;
+      }
+
       return params;
     };
 

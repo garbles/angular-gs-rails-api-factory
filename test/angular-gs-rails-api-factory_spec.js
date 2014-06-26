@@ -1,6 +1,7 @@
 describe('RailsApiFactory', function () {
   var base = 'base',
     modelName = 'Model',
+    serializedData = { gabe: 'gabe' },
     Model,
     ModelCollection,
     api,
@@ -17,6 +18,23 @@ describe('RailsApiFactory', function () {
         };
       })
       .factory(modelName + 'Collection', function () {
+        return {
+          mixin: function (obj) {
+            return obj;
+          }
+        };
+      })
+      .factory(modelName + 'WithSerializer', function () {
+        return {
+          mixin: function (obj) {
+            return angular.extend(obj, this);
+          },
+          serialize: function () {
+            return serializedData;
+          }
+        };
+      })
+      .factory(modelName + 'WithSerializer' + 'Collection', function () {
         return {
           mixin: function (obj) {
             return obj;
@@ -74,5 +92,17 @@ describe('RailsApiFactory', function () {
 
     api = _RailsApiFactory_(modelName, {plural: plural});
     requestExpectation('/' + plural, 'get', 'GET', {}, {});
+  }));
+
+  it('uses the object serializer if one is present', inject(function (_RailsApiFactory_, _ModelWithSerializer_) {
+    var url = '/model_with_serializers',
+      obj = _ModelWithSerializer_.mixin({}),
+      data = { model_with_serializer: serializedData },
+      _api = _RailsApiFactory_(modelName + 'WithSerializer');
+
+    $httpBackend.when('POST', base + url).respond({});
+    $httpBackend.expectPOST(base + url, data);
+    _api.save(obj);
+    $httpBackend.flush();
   }));
 });

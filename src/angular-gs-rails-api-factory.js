@@ -13,14 +13,19 @@ angular.module('gs.rails-api-factory', [
 function ($resource, $injector, ApiBase, toSnakeCase) {
   return function (model, opts) {
     var _snakeModel = toSnakeCase(model),
+      _model = $injector.get(model),
+      _collection = $injector.get(model + 'Collection'),
       _snakeModels,
       _resource,
       _params,
       _mixinResponse;
 
     opts = (opts || {});
+
     if (opts.plural) {
       _snakeModels = toSnakeCase(opts.plural);
+    } else if (_snakeModel.slice(_snakeModel.length - 1) === 'y') {
+     _snakeModels = _snakeModel.slice(0, _snakeModel.length - 1) + 'ies';
     } else {
       _snakeModels = _snakeModel + 's';
     }
@@ -30,9 +35,9 @@ function ($resource, $injector, ApiBase, toSnakeCase) {
     _mixinResponse = function (response) {
       var collection = response[_snakeModels];
       if (collection) {
-        return $injector.get(model + 'Collection').mixin(collection);
+        return _collection.mixin(collection);
       } else {
-        return $injector.get(model).mixin(response);
+        return _model.mixin(response);
       }
     };
 
